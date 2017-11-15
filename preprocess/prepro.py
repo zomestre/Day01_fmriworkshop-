@@ -69,7 +69,9 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
             os.chdir(os.path.join(basedir, dir))
             for input in glob.glob('*.nii.gz'):
                 output=input.strip('.nii.gz')
-                if input.endswith('mcf'):
+                print(output)
+                pdb.set_trace()
+                if output.endswith('mcf'):
                     print(output+' exists, skipping')
                 else:
                     os.system("mcflirt -in %s -plots"%(output))
@@ -79,7 +81,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
-                            usr_in=raw_input('looks like par exists, continue?')
+                            usr_in=raw_input('looks like par exists, continue? ')
                             if fnmatch.fnmatch(usr_in, 'n'):
                                 print("not saving the par file in motion_assessment")
                             elif fnmatch.fnmatch(usr_in, 'y'):
