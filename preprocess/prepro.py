@@ -16,16 +16,16 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
         os.chdir(os.path.join(basedir))
         for nifti in glob.glob('sub-*/func'):
             os.chdir(os.path.join(basedir, nifti))
-            for input in glob.glob('*.nii.gz'):
+            for input in glob.glob('*bold.nii.gz'):
                 output=input.strip('.nii.gz')
-                if os.path.exists(output+'brain.nii.gz'):
+                if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
                 else:
                     BET_OUTPUT=output+'_brain'
                     x=("/usr/local/fsl/bin/bet %s %s -F"%(input, BET_OUTPUT))
                     print(x)
                     os.system(x)
-                    pdb.set_trace()
+                    #pdb.set_trace()
 #reorienting
     if args.REOR==True:
         print("starting reorientation, please check that it is correct at the break if yes, click c, if no click q")
@@ -61,16 +61,17 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
         print("starting motion correction")
         if os.path.exists(out_bad_bold_list):
             os.system("rm %s"%(out_bad_bold_list))
+        if os.path.exists(outhtml):
             os.system("rm %s"%(outhtml))
         os.chdir(os.path.join(basedir))
         for dir in glob.glob('sub-*/func'):
             if not os.path.exists(os.path.join(basedir,dir,'motion_assessment')):
                 os.makedirs(os.path.join(basedir,dir,'motion_assessment'))
             os.chdir(os.path.join(basedir, dir))
-            for input in glob.glob('*.nii.gz'):
-                output=input.strip('.nii.gz')
+            for input in glob.glob('*brain.nii.gz'):
+                output=input.split('.')[0]
+                #output=input.strip('.nii.gz')
                 print(output)
-                pdb.set_trace()
                 if output.endswith('mcf'):
                     print(output+' exists, skipping')
                 else:
@@ -90,7 +91,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                             else:
                                 print("Please answer y for yes and n for n")
                                 continue
-                    pdb.set_trace()
+                    
  
 
 def main():
