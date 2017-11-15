@@ -79,24 +79,15 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
-                            while True:
-                                try:
-                                    usr_in=str(input("looks like %s_mcf.par exists, continue?"%(output)))
-                                except ValueError:
-                                    print("Please answer y for yes and n for n")
-                                    continue
-                                if fnmatch.fnmatch(usr_in, 'n'):
-                                    break
-                                elif fnmatch.fnmatch(usr_in, 'y'):
-                                    break
-                                else:
-                                    print("Please answer y for yes and n for n")
-                                    continue
+                            usr_in=raw_input('looks like par exists, continue?')
                             if fnmatch.fnmatch(usr_in, 'n'):
-                                "not saving the par file in motion_assessment"
-                            else:
+                                print("not saving the par file in motion_assessment")
+                            elif fnmatch.fnmatch(usr_in, 'y'):
                                 os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
                                 shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                            else:
+                                print("Please answer y for yes and n for n")
+                                continue
                     pdb.set_trace()
  
 
