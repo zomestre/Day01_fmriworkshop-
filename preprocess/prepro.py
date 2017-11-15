@@ -4,6 +4,7 @@ import os
 import pdb
 #import sys
 import argparse
+import shutil
 
 def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
 #bet
@@ -57,32 +58,45 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
         print("please set a threshold for the FD, a good one is 0.9")
     else:
         print("starting motion correction")
+        if os.path.exists(out_bad_bold_list):
+            os.system("rm %s"%(out_bad_bold_list))
+            os.system("rm %s"%(outhtml))
         os.chdir(os.path.join(basedir))
         for dir in glob.glob('sub-*/func'):
             if not os.path.exists(os.path.join(basedir,dir,'motion_assessment')):
                 os.makedirs(os.path.join(basedir,dir,'motion_assessment'))
-                pdb.set_trace()
             os.chdir(os.path.join(basedir, dir))
             for input in glob.glob('*.nii.gz'):
                 output=input.strip('.nii.gz')
                 if os.path.exists(output+'_mcf.nii.gz'):
                     print(output+' exists, skipping')
                 else:
+                    os.system("mcflirt -in %s -plots"%(output))
                     os.system("fsl_motion_outliers -i %s -o motion_assessment/confound.txt --fd --thresh=%s -p motion_assessment/fd_plot -v > motion_assessment/outlier_output.txt"%(output,arglist['MOCO']))
                     os.system("cat motion_assessment/outlier_output.txt >> %s"%(outhtml))
-                    os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s/motion_assess/fd_plot.png WIDTH=100%s></BODY></HTML>' >> %s"%(dir, dir,'%', outhtml))
+                    plotz=os.path.join(basedir,dir,'motion_assessment','fd_plot.png')
+                    os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
+                    shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                    rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+                    table = [line.rstrip().split() for line in rawfile.readlines()]
+                    for i in range(6):
+                        newtable = ([[line[i]] for line in table])
+                        f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor'+str(i)+'.txt'%(output)),'w')
+                        for item in newtable:
+                            neat=item[0]
+                            f.write(str(neat)+'\n')
+                        f.close()
                     pdb.set_trace()
  
 
 def main():
     basedir='/Users/gracer/Google Drive/fMRI_workshop/data'
-    # I'm using a big html file to put all QA info together.  If you have other suggestions, let me know!
-    outhtml = "/Users/jeanettemumford/Documents/Research/Talks/MumfordBrainStats/ds008/Scripts/bold_motion_QA.html"
-    out_bad_bold_list = "/Users/jeanettemumford/Documents/Research/Talks/MumfordBrainStats/ds008/Scripts/subs_lose_gt_45_vol_scrub.txt"
- 
-    os.system("rm %s"%(out_bad_bold_list))
-    os.system("rm %s"%(outhtml))
+    writedir='/Users/gracer/Desktop/trash'
     
+    # I'm using a big html file to put all QA info together.  If you have other suggestions, let me know!
+    outhtml = os.path.join(writedir,'bold_motion_QA.html')
+    out_bad_bold_list = os.path.join(writedir,'subs_lose_gt_45_vol_scrub.txt')
+
     parser=argparse.ArgumentParser(description='preprocessing')
     parser.add_argument('-bet',dest='STRIP',action='store_true',
                         default=False, help='bet via fsl using defaults for functional images')
