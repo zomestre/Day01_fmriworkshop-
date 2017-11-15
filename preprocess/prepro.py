@@ -5,6 +5,7 @@ import pdb
 #import sys
 import argparse
 import shutil
+import fnmatch
 
 def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
 #bet
@@ -78,9 +79,24 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
-                            print("looks like %s_mcf.par exists, continue?"%(output))
-                            os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
-                            shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                            while True:
+                                try:
+                                    usr_in=str(input("looks like %s_mcf.par exists, continue?"%(output)))
+                                except ValueError:
+                                    print("Please answer y for yes and n for n")
+                                    continue
+                                if fnmatch.fnmatch(usr_in, 'n'):
+                                    break
+                                elif fnmatch.fnmatch(usr_in, 'y'):
+                                    break
+                                else:
+                                    print("Please answer y for yes and n for n")
+                                    continue
+                            if fnmatch.fnmatch(usr_in, 'n'):
+                                "not saving the par file in motion_assessment"
+                            else:
+                                os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
+                                shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
                     pdb.set_trace()
  
 
