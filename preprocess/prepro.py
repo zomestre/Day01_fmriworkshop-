@@ -2,15 +2,13 @@
 import glob
 import os
 import pdb
-#import sys
+import datetime
 import argparse
 import shutil
 import fnmatch
 
 def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
 #bet
-    #print(args)
-    #pdb.set_trace()
     if args.STRIP==True:
         print("starting bet")
         os.chdir(os.path.join(basedir))
@@ -59,10 +57,6 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
         print("please set a threshold for the FD, a good one is 0.9")
     else:
         print("starting motion correction")
-        if os.path.exists(out_bad_bold_list):
-            os.system("rm %s"%(out_bad_bold_list))
-        if os.path.exists(outhtml):
-            os.system("rm %s"%(outhtml))
         os.chdir(os.path.join(basedir))
         for dir in glob.glob('sub-*/func'):
             if not os.path.exists(os.path.join(basedir,dir,'motion_assessment')):
@@ -70,14 +64,13 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
             os.chdir(os.path.join(basedir, dir))
             for input in glob.glob('*brain.nii.gz'):
                 output=input.split('.')[0]
-                #output=input.strip('.nii.gz')
                 print(output)
                 if output.endswith('mcf'):
                     print(output+' exists, skipping')
                 else:
                     os.system("mcflirt -in %s -plots"%(output))
-                    os.system("fsl_motion_outliers -i %s -o motion_assessment/confound.txt --fd --thresh=%s -p motion_assessment/fd_plot -v > motion_assessment/outlier_output.txt"%(output,arglist['MOCO']))
-                    os.system("cat motion_assessment/outlier_output.txt >> %s"%(outhtml))
+                    os.system("fsl_motion_outliers -i %s -o motion_assessment/%s_confound.txt --fd --thresh=%s -p motion_assessment/fd_plot -v > motion_assessment/%s_outlier_output.txt"%(output,output,arglist['MOCO'],output))
+                    os.system("cat motion_assessment/%s_outlier_output.txt >> %s"%(output,outhtml))
                     plotz=os.path.join(basedir,dir,'motion_assessment','fd_plot.png')
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
                     if os.path.exists("%s_mcf.par"%(output)):
@@ -88,19 +81,39 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                             elif fnmatch.fnmatch(usr_in, 'y'):
                                 os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
                                 shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                                rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+                                table = [line.rstrip().split() for line in rawfile.readlines()]
+                                for i in range(6):
+                                    newtable = ([[line[i]] for line in table])
+                                    f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
+                                    for item in newtable:
+                                        neat=item[0]
+                                        f.write(str(neat)+'\n')
+                                    f.close()
                             else:
                                 print("Please answer y for yes and n for n")
-                                continue
-                    
+                                usr_in=raw_input('looks like par exists, continue? ')
+                        else:
+                            shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                            rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+                            table = [line.rstrip().split() for line in rawfile.readlines()]
+                            for i in range(6):
+                                newtable = ([[line[i]] for line in table])
+                                f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
+                                for item in newtable:
+                                    neat=item[0]
+                                    f.write(str(neat)+'\n')
+                                f.close()
+                pdb.set_trace()
  
 
 def main():
     basedir='/Users/gracer/Desktop/data'
     writedir='/Users/gracer/Desktop/trash'
     
-    # I'm using a big html file to put all QA info together.  If you have other suggestions, let me know!
-    outhtml = os.path.join(writedir,'bold_motion_QA.html')
-    out_bad_bold_list = os.path.join(writedir,'subs_lose_gt_45_vol_scrub.txt')
+    datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
+    outhtml = os.path.join(writedir,'bold_motion_QA_%s.html'%(datestamp))
+    out_bad_bold_list = os.path.join(writedir,'subs_lose_gt_45_vol_scrub_%s.txt'%(datestamp))
 
     parser=argparse.ArgumentParser(description='preprocessing')
     parser.add_argument('-bet',dest='STRIP',action='store_true',
@@ -120,5 +133,5 @@ def main():
     for a in args._get_kwargs():
         arglist[a[0]]=a[1]
     print(arglist)
-    prepro(basedir, args, arglist, outhtml, out_bad_bold_list)
+    prepro(basedir, args, arglist, outhtml, out_bad_bold_list)    
 main()
