@@ -6,6 +6,7 @@ import datetime
 import argparse
 import shutil
 import fnmatch
+import subprocess
 
 def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
 #bet
@@ -73,6 +74,16 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     os.system("cat motion_assessment/%s_outlier_output.txt >> %s"%(output,outhtml))
                     plotz=os.path.join(basedir,dir,'motion_assessment','fd_plot.png')
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
+                    
+                    if os.path.isfile("motion_assessment/%s_confound.txt"%(output))==False:
+                        os.system("touch motion_assessment/%s_confound.txt"%(output))
+                        
+                    check = subprocess.check_output("grep -o 1 motion_assessment/%s_confound.txt | wc -l"%(output), shell=True)
+                    num_scrub = [int(s) for s in check.split() if s.isdigit()]
+                    if num_scrub[0]>45:
+                        with open(out_bad_bold_list, "a") as myfile:
+                            myfile.write("%s\n"%(output))
+                    pdb.set_trace()
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
                             usr_in=raw_input('looks like par exists, continue? ')
@@ -108,25 +119,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
  
 
 
-if os.path.isfile("%s/motion_assess/confound.txt"%(cur_dir))==False:
-      os.system("touch %s/motion_assess/confound.txt"%(cur_dir))
- 
-    # Very last, create a list of subjects who exceed a threshold for
-    #  number of scrubbed volumes.  This should be taken seriously.  If
-    #  most of your scrubbed data are occurring during task, that's
-    #  important to consider (e.g. subject with 20 volumes scrubbed
-    #  during task is much worse off than subject with 20 volumes
-    #  scrubbed during baseline.
-    # These data have about 182 volumes and I'd hope to keep 140
-    #  DO NOT USE 140 JUST BECAUSE I AM.  LOOK AT YOUR DATA AND
-    #  COME TO AN AGREED VALUE WITH OTHER RESEARCHERS IN YOUR GROUP
-    output = subprocess.check_output("grep -o 1 %s/motion_assess/confound.txt | wc -l"%(cur_dir), shell=True)
-    num_scrub = [int(s) for s in output.split() if s.isdigit()]
-    if num_scrub[0]>45:
-        with open(out_bad_bold_list, "a") as myfile:
-          myfile.write("%s\n"%(cur_bold)
-
-
+    myfile.close()
 
 def main():
     basedir='/Users/gracer/Desktop/data'
