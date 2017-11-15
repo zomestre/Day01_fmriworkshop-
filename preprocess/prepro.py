@@ -68,7 +68,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
             os.chdir(os.path.join(basedir, dir))
             for input in glob.glob('*.nii.gz'):
                 output=input.strip('.nii.gz')
-                if os.path.exists(output+'_mcf.nii.gz'):
+                if input.endswith('mcf'):
                     print(output+' exists, skipping')
                 else:
                     os.system("mcflirt -in %s -plots"%(output))
@@ -77,20 +77,11 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     plotz=os.path.join(basedir,dir,'motion_assessment','fd_plot.png')
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
                     shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
-                    rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
-                    table = [line.rstrip().split() for line in rawfile.readlines()]
-                    for i in range(6):
-                        newtable = ([[line[i]] for line in table])
-                        f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor'+str(i)+'.txt'%(output)),'w')
-                        for item in newtable:
-                            neat=item[0]
-                            f.write(str(neat)+'\n')
-                        f.close()
                     pdb.set_trace()
  
 
 def main():
-    basedir='/Users/gracer/Google Drive/fMRI_workshop/data'
+    basedir='/Users/gracer/Desktop/data'
     writedir='/Users/gracer/Desktop/trash'
     
     # I'm using a big html file to put all QA info together.  If you have other suggestions, let me know!
