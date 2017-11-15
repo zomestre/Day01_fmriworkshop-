@@ -107,6 +107,27 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                 pdb.set_trace()
  
 
+
+if os.path.isfile("%s/motion_assess/confound.txt"%(cur_dir))==False:
+      os.system("touch %s/motion_assess/confound.txt"%(cur_dir))
+ 
+    # Very last, create a list of subjects who exceed a threshold for
+    #  number of scrubbed volumes.  This should be taken seriously.  If
+    #  most of your scrubbed data are occurring during task, that's
+    #  important to consider (e.g. subject with 20 volumes scrubbed
+    #  during task is much worse off than subject with 20 volumes
+    #  scrubbed during baseline.
+    # These data have about 182 volumes and I'd hope to keep 140
+    #  DO NOT USE 140 JUST BECAUSE I AM.  LOOK AT YOUR DATA AND
+    #  COME TO AN AGREED VALUE WITH OTHER RESEARCHERS IN YOUR GROUP
+    output = subprocess.check_output("grep -o 1 %s/motion_assess/confound.txt | wc -l"%(cur_dir), shell=True)
+    num_scrub = [int(s) for s in output.split() if s.isdigit()]
+    if num_scrub[0]>45:
+        with open(out_bad_bold_list, "a") as myfile:
+          myfile.write("%s\n"%(cur_bold)
+
+
+
 def main():
     basedir='/Users/gracer/Desktop/data'
     writedir='/Users/gracer/Desktop/trash'
