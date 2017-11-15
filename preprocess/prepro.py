@@ -76,7 +76,11 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     os.system("cat motion_assessment/outlier_output.txt >> %s"%(outhtml))
                     plotz=os.path.join(basedir,dir,'motion_assessment','fd_plot.png')
                     os.system("echo '<p>=============<p>FD plot %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(output,plotz,'100%', outhtml))
-                    shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                    if os.path.exists("%s_mcf.par"%(output)):
+                        if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
+                            print("looks like %s_mcf.par exists, continue?"%(output))
+                            os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
+                            shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
                     pdb.set_trace()
  
 
