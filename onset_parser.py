@@ -13,7 +13,7 @@ def ons_parse(basepath,args, arglist):
     os.chdir(basepath)
     print arglist['COLS']
     for item in arglist['COLS']:
-        for ons_file in glob.glob('sub-*/func/sub-*bart_events.tsv'):
+        for ons_file in glob.glob('sub-*/func/sub-*%s_events.tsv'%arglist['TASK']):
             print("starting %s"%ons_file)
             sub=ons_file.split('/')[0]
             if os.path.exists(os.path.join(basepath, sub, 'func','onsets'))==False:
@@ -30,7 +30,7 @@ def ons_parse(basepath,args, arglist):
                 print("this looks categorical, let's change it to 0s and 1s")
                 use[item] = pandas.get_dummies(use[item])
             print(use)
-            use.to_csv(os.path.join(basepath,sub,'func','onsets','%s_%s_output.csv'%(sub,item)), index=False, header=False)
+            use.to_csv(os.path.join(basepath,sub,'func','onsets','%s_%s_%s_output.txt'%(sub,arglist['TASK'],item)), sep=" " ,index=False, header=False)
         
 #            pdb.set_trace()        
 
@@ -41,6 +41,8 @@ def main():
     
 
     parser=argparse.ArgumentParser(description='onset parser, expecting a tsv file')
+    parser.add_argument('-task',dest='TASK',
+                        default=False, help='which task would you like to parse?')
     parser.add_argument('-cols',dest='COLS',nargs='+',
                         default=False, help='which columns do you want? Each file will contain the onset, duration, and the column of choice. You can list multiple columns')
     args = parser.parse_args()
