@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import glob
 import os
-import pdb
+#import pdb
 import datetime
 import argparse
 import shutil
@@ -24,7 +24,26 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     x=("/usr/local/fsl/bin/bet %s %s -F"%(input, BET_OUTPUT))
                     print(x)
                     os.system(x)
-                    #pdb.set_trace()
+                    
+
+#bet rage
+    if args.RAGE==True:
+        print("starting bet rage")
+        os.chdir(os.path.join(basedir))
+        for nifti in glob.glob('sub-*/anat'):
+            os.chdir(os.path.join(basedir, nifti))
+            for input in glob.glob('*T1w.nii.gz'):
+                output=input.strip('.nii.gz')
+                if os.path.exists(output+'_brain.nii.gz'):
+                    print(output+' exists, skipping')
+                else:
+                    BET_OUTPUT=output+'_brain'
+                    x=("/usr/local/fsl/bin/bet %s %s -R"%(input, BET_OUTPUT))
+                    print(x)
+                    os.system(x)
+                    
+
+
 #reorienting
     if args.REOR==True:
         print("starting reorientation, please check that it is correct at the break if yes, click c, if no click q")
@@ -34,8 +53,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
             for input in glob.glob('*.nii.gz'):
                 output=input.strip('.nii.gz')
                 os.system("fslswapdim %s z -x -y %s_swapped"%(output, output))
-                pdb.set_trace()
-
+                
 #trimming
     if args.TRIM==True:
         if args.EX==False:
@@ -51,7 +69,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                 for input in glob.glob('*.nii.gz'):
                     output=input.strip('.nii.gz')
                     os.system("fslroi %s %s_trimmed %s %s"%(output, output, arglist['EX'], arglist['TOT']))
-                    pdb.set_trace()
+                    
             
 #motion correction
     if args.MOCO==False:
@@ -83,7 +101,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     if num_scrub[0]>45:
                         with open(out_bad_bold_list, "a") as myfile:
                             myfile.write("%s\n"%(output))
-                    pdb.set_trace()
+                    
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
                             usr_in=raw_input('looks like par exists, continue? ')
@@ -115,7 +133,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                                     neat=item[0]
                                     f.write(str(neat)+'\n')
                                 f.close()
-                pdb.set_trace()
+                
  
 
 
@@ -132,6 +150,8 @@ def main():
     parser=argparse.ArgumentParser(description='preprocessing')
     parser.add_argument('-bet',dest='STRIP',action='store_true',
                         default=False, help='bet via fsl using defaults for functional images')
+    parser.add_argument('-betrage',dest='RAGE',action='store_true',
+                        default=False, help='bet via fsl using robust estimation for anatomical images')
     parser.add_argument('-reorient',dest='REOR',action='store_true',
                         default=False, help='using fslswapdim to fix orientation problems')
     parser.add_argument('-trim',dest='TRIM',action='store_true',
