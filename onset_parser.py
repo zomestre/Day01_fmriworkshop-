@@ -7,6 +7,7 @@ import glob
 import os
 #import fnmatch
 import pdb
+import pandas
 
 handles=[]
 basepath='/Users/gracer/Desktop/data'
@@ -22,15 +23,17 @@ for ons_file in glob.glob('sub-*/func/sub-*bart_events.tsv'):
     sub=ons_file.split('/')[0]
     if os.path.exists(os.path.join(basepath, sub, 'func','onsets'))==False:
         os.makedirs(os.path.join(basepath, sub, 'func','onsets'))
-    with open(ons_file,'r') as f:
-        for line in f.readlines()[:]:
-            print("HI GRACE")
-            l_s=line.strip().split('\t')
-            onsets.append(l_s[0])
-            duration.append(l_s[1])
-            RT.append(l_s[2])
-            trialT.append(l_s[4])
-            action.append(l_s[6])
+    x=pandas.read_csv(ons_file, sep='\t', lineterminator='\r')        
+    onsets.append(x.iloc[:,0])
+#    with open(ons_file,'r') as f:
+#        for line in f.readlines()[:]:
+#            print("HI GRACE")
+#            l_s=line.strip().split('\t')
+#            onsets.append(l_s[0])
+#            duration.append(l_s[1])
+#            RT.append(l_s[2])
+#            trialT.append(l_s[4])
+#            action.append(l_s[6])
     filename=ons_file.split('/')[2].split('.')[0]
     print(filename)
     ons_array=np.array(onsets)
