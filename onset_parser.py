@@ -18,6 +18,7 @@ def ons_parse(basepath,args, arglist,missing):
             sub=ons_file.split('/')[0]
             if os.path.exists(os.path.join(basepath, sub, 'func','onsets'))==False:
                 os.makedirs(os.path.join(basepath, sub, 'func','onsets'))
+                
             x=pandas.read_csv(ons_file, sep='\t', na_values=missing['miss'])
             use=x[['onset','duration','%s'%item]]
             print(use[item].dtype) 
@@ -42,7 +43,7 @@ def ons_parse(basepath,args, arglist,missing):
                     
                     tosave.to_csv(save_name, sep=" " ,index=False, header=False)
                 
-                #use.to_csv(os.path.join(basepath,sub,'func','onsets','%s_%s_%s_output.txt'%(sub,arglist['TASK'],item)), sep=" " ,index=False, header=False)
+                
             print(use)
             use.to_csv(os.path.join(basepath,sub,'func','onsets','%s_%s_%s_output.txt'%(sub,arglist['TASK'],item)), sep=" " ,index=False, header=False)
                
