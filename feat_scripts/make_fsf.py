@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #import sys
 import glob
 import os
@@ -12,21 +14,25 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
     os.chdir(basedir)
     for sub in glob.glob('sub-*'):
         repl_dict.update({'SUB':sub})
-        print(sub)
+
         scan=(os.path.join(sub,'func','%s_task-%s_bold_brain_mcf.nii.gz')%(sub,arglist['TASK']))
-        print(scan)
-            #task=scan.split('/')[2].split('_')[1].split('-')[1]
+
         funcrun=os.path.join(basedir,scan)
         repl_dict.update({'FUNCRUN':funcrun})
+
         ntmpts=check_output(['fslnvols',funcrun])
         repl_dict.update({'NTIMEPOINTS':ntmpts})
+
         trs=check_output(['fslval','%s'%(funcrun),'pixdim4',scan])
+        print(trs)
         repl_dict.update({'TRS':trs})
+        pdb.set_trace()
+
         output=os.path.join(outdir,sub,arglist['TASK'])
         repl_dict.update({'OUTPUT':output})            
         anat=os.path.join(basedir,sub,'anat','%s_T1w_brain.nii.gz'%(sub))
         repl_dict.update({'ANAT':anat})
-        print arglist['EV']
+#        print arglist['EV']
         confounds=os.path.join(basedir,sub,'func','motion_assessment','%s_task-%s_bold_brain_confound.txt'%(sub,arglist['TASK']))
         repl_dict.update({'CONFOUNDS':confounds})
         ctr=0
@@ -39,7 +45,7 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
         for i in range(6):
             motcor=os.path.join(basedir,sub,'func','motion_assessment','%s_task-%s_bold_brain_motcor%i.txt' %(sub,arglist['TASK'],i))
             repl_dict.update({'MOTCOR%i'%i:motcor})
-        pdb.set_trace()
+#        pdb.set_trace()
         print(repl_dict)
         if arglist['NOREG']==False:
             with open(os.path.join(basedir,'design.fsf'),'r') as infile:
@@ -60,7 +66,7 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
                         outfile.write(tempfsf)
                     outfile.close()
                 infile.close()
-
+    os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts/feat_scripts')
                        
 
 def main ():
@@ -82,3 +88,4 @@ def main ():
       print(arglist)
   create_fsf(basedir,repl_dict, outdir, arglist)
 main()
+os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts/feat_scripts')

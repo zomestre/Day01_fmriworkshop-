@@ -37,7 +37,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
                 else:
-                    BET_OUTPUT=output+'_brain'
+                    BET_OUTPUT=output+'_defaced'
                     x=("/usr/local/fsl/bin/bet %s %s -R"%(input, BET_OUTPUT))
                     print(x)
                     os.system(x)
@@ -141,7 +141,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
 
 def main():
     basedir='/Users/gracer/Desktop/data'
-    writedir='/Users/gracer/Desktop/trash'
+    writedir='/Users/gracer/Desktop/data'
     
     datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
     outhtml = os.path.join(writedir,'bold_motion_QA_%s.html'%(datestamp))
@@ -160,7 +160,7 @@ def main():
                         default=False, help='TRs to remove')
     parser.add_argument('-total',dest='TOT',
                         default=False, help='total TRs')
-    parser.add_argument('-moco',dest='MOCO',
+    parser.add_argument('-moco',dest='MOCO',action='store_true',
                         default=False, help='this is using fsl_motion_outliers to preform motion correction and generate a confounds.txt as well as DVARS')
     args = parser.parse_args()
     arglist={}
