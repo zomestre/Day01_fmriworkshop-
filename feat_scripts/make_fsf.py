@@ -4,7 +4,7 @@
 import glob
 import os
 from subprocess import check_output
-import pdb
+#import pdb
 import argparse
 
 #confounds CONFOUNDS
@@ -26,9 +26,9 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
         trs=check_output(['fslval','%s'%(funcrun),'pixdim4',scan])
         print(trs)
         repl_dict.update({'TRS':trs})
-        pdb.set_trace()
+#        pdb.set_trace()
 
-        output=os.path.join(outdir,sub,arglist['TASK'])
+        output=os.path.join(outdir,sub,'grace_edit',arglist['TASK'])
         repl_dict.update({'OUTPUT':output})            
         anat=os.path.join(basedir,sub,'anat','%s_T1w_brain.nii.gz'%(sub))
         repl_dict.update({'ANAT':anat})
@@ -62,7 +62,7 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
                 tempfsf=infile.read()
                 for key in repl_dict:
                     tempfsf = tempfsf.replace(key, repl_dict[key])
-                    with open(os.path.join(outdir,sub,'%s_%s.fsf'%(sub,arglist['TASK'])),'w') as outfile:
+                    with open(os.path.join(outdir,sub,'%s_%s_no_reg.fsf'%(sub,arglist['TASK'])),'w') as outfile:
                         outfile.write(tempfsf)
                     outfile.close()
                 infile.close()

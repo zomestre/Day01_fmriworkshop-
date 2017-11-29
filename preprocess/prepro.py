@@ -15,7 +15,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
         os.chdir(os.path.join(basedir))
         for nifti in glob.glob('sub-*/func'):
             os.chdir(os.path.join(basedir, nifti))
-            for input in glob.glob('*bold.nii.gz'):
+            for input in glob.glob('*bart_bold.nii.gz'):
                 output=input.strip('.nii.gz')
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
@@ -160,7 +160,7 @@ def main():
                         default=False, help='TRs to remove')
     parser.add_argument('-total',dest='TOT',
                         default=False, help='total TRs')
-    parser.add_argument('-moco',dest='MOCO',action='store_true',
+    parser.add_argument('-moco',dest='MOCO',
                         default=False, help='this is using fsl_motion_outliers to preform motion correction and generate a confounds.txt as well as DVARS')
     args = parser.parse_args()
     arglist={}
@@ -169,3 +169,4 @@ def main():
     print(arglist)
     prepro(basedir, args, arglist, outhtml, out_bad_bold_list)    
 main()
+os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts')
