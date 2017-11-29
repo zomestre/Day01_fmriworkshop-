@@ -4,11 +4,12 @@
 import glob
 import os
 from subprocess import check_output
-#import pdb
+import pdb
 import argparse
 
 #confounds CONFOUNDS
 #evs EV1
+#numEVS=NUMVS
 
 def create_fsf(basedir,repl_dict,outdir, arglist):
     os.chdir(basedir)
@@ -56,6 +57,7 @@ def create_fsf(basedir,repl_dict,outdir, arglist):
                         outfile.write(tempfsf)
                     outfile.close()
                 infile.close()
+
         else:
             print("skipping registration")
             with open(os.path.join(basedir,'no_reg_design.fsf'),'r') as infile:
