@@ -25,11 +25,6 @@ def reg_check(basedir,IDmat):
         regDIR=os.path.join(sub,'reg','standard.nii.gz')
         shutil.copy2(meanFUNC,regDIR)
         
-#        for (dirpath, dirnames, filenames) in os.walk(sub):
-#            for dirname in dirnames:
-#                print(dirname)
-#                if filename.endswith('.mat'):
-#                    print(os.path.join(dirpath,filename))
                     
         
             
@@ -46,4 +41,4 @@ main()
 #copy the mean_func.nii.gz to reg/standard.nii.gz
 #check the voxel intensities in the stats/cope.nii.gz and reg_standard/stats/cope.nii.gz 
 #need to be the same (level 1)
-#data dimension and pixel size should be the same
+#data dimension and pixel size should be the samea
