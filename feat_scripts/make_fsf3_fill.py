@@ -13,31 +13,47 @@ import pdb
 def create_fsf3(basedir,repl_dict, outdir, arglist):
     for item in arglist['COPE']:
         print item
-        feats=glob.glob(os.path.join(basedir,'derivatives','task','sub-*','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item))
+        feats=glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item))
         inputdir=len(feats)
         repl_dict.update({'INPUTDIR':inputdir})
-        cope='cope'+str(item)
+#        cope='cope'+str(item)
         output=os.path.join(basedir,'derivatives','task','sub-*','%s_%s.gfeat'%(arglist['TASK'],item))
         repl_dict.update({'OUTPUT':output})
         i=0
+        
         with open(os.path.join(basedir,'level3_test.fsf'),'r') as infile:
                 data=infile.readlines()
+                
         for sub in glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item)):
-            print('HI')
-            
-
             i=i+1
-            data[271+i]=('set feat_files(%i) "%s"\n'%(i,sub))
-            print(data[271+i])
-            with open(os.path.join(basedir,'new_level3_test.fsf'),'w') as outfile:
-                outfile.writelines(data)
+            data[272+i]=('set feat_files(%i) "%s"\n'%(i,sub))
+            print(data[272+i])
+            data[317+inputdir+i]=('set fmri(evg%i.1) 1'%(i))
+            data[319+inputdir+i]=('set fmri(groupmem.%i) 1'%(i))
+            
+            with open(os.path.join(basedir,'new_level3_test.fsf'),'w') as tempfsf:
+                tempfsf.writelines(data)
+        tempfsf.close()
+        print('test')
+        pdb.set_trace()
+            
+        with open(os.path.join(basedir,'new_level3_test.fsf'),'r') as infile:
+            tempfsf=infile.read()
+            for key in repl_dict:
+                tempfsf = tempfsf.replace(key, repl_dict[key])
+                with open(os.path.join(outdir,'%s_cope%s.fsf'%(sub,item)),'w') as outfile:
+                    outfile.write(tempfsf)
+    if os.path.exists(os.path.join(basedir,'new_level3_test.fsf')):
+        os.remove(os.path.join(basedir,'new_level3_test.fsf'))
+#        for key in repl_dict:
+#        tempfsf = tempfsf.replace(key, repl_dict[key])
+#        with open(os.path.join(outdir,'%s_cope_%s.fsf'%(arglist['TASK'],arglist['COPE'])),'w') as outfile:
+#        outfile.write(tempfsf)
 #                tempfsf=infile.read()   
 #                for key in repl_dict:
 #                    tempfsf = tempfsf.replace(key, repl_dict[key])
 #                    with open(os.path.join(outdir,'%s_cope%s.fsf'%(sub,item)),'w') as outfile:
 #                        outfile.write(tempfsf)
-
-#        repl_dict.update({'COPE':cope})
 #        
 #        print("cool")
 #        pdb.set_trace()
@@ -56,8 +72,8 @@ def create_fsf3(basedir,repl_dict, outdir, arglist):
 #                    	tempfsf = tempfsf.replace(key, repl_dict[key])
 #                    	with open(os.path.join(level3_path,fsf_name),'w') as outfile:
 #                            	outfile.write(tempfsf)
-
-
+#
+#
 def main():
 
     basedir='/Users/gracer/Desktop/data'
