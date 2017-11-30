@@ -10,20 +10,14 @@ This is how you do a block comment
 # This is how you do individual comments
 
 
-variableI = 100 # This is an Integer 
-variableF= 100.30 # This is a Float 
-variableB = True # This is a Boolean 
-variableS = "fMRI Workshop 2017" # This is a String
-print("Integer: %d\n" % (variableI) +  "Float:  %d\n" % (variableF) 
-        + "Boolean:  %s\n" %(variableB) + "String: %s" %(variableS))  
 
 
-
-# Lists in Python
 def makeList():
     nationalParks = ['Yosemite', 'Grand Canyon', "Zion", "Bryce", "Arches"]
-    squares = [1, 4, 9, 16]
+    
     print("Index 0 of National Parks list: " + nationalParks[0])
+    return makeList
+
 
 def appendList(userInput):
     nationalParks.append(userInput)
@@ -35,10 +29,7 @@ def sortList():
     print(nationalParks)
 
 
-sum = 0
-for num in squares:
-    sum += num
-print("Sum of Squares list: " + str(sum))
+
 
 def makeDictionary():
     
@@ -54,6 +45,7 @@ def makeDictionary():
     print(my_dict)
     print("dict['Name']:", my_dict['Name'], "\ndict['Species']:", my_dict['Species'], "\ndict['Age']):", my_dict['Age'])
     
+    return my_dict 
   
 
 
@@ -62,23 +54,17 @@ def makeDictionary():
 
 
 def dictionaryExamples(selection):
-    switch (selection): {
-        case 0:
-           # if "Name" in my_dict: 
-                   # print("TRUE");
-            break;
-        case 1:
-            my_dict['Age'] = 8; # update Dictionary
-            print("Updated dict['Age']", my_dict['Age']);
-            break;
-        case 2:
-            my_dict['BloodType'] = 'A';  # Add new entry
-            print(dict);
-            break;
-        default:
-            break;
-            
-        }
+    if selection == "IF":
+        if "Name" in my_dict: 
+            print("TRUE")
+    if selection == "Update":
+        my_dict['Age'] = 8; # update Dictionary
+        print("Updated dict['Age']", my_dict['Age'])
+    if selection == "Add":
+        my_dict['BloodType'] = 'A';  # Add new entry
+        print(dict)
+       
+        
 # compound statements
 
 # if statement
@@ -112,22 +98,27 @@ def ifExamples():
 
 
 
-def forExamples():  # using a range
-    for i in range(5):
-        print('i is now.......... %s' %(i))
+def forExamples(choice):  # using a range
+    if choice == "Range":
+        for i in range(5):
+            print('i is now.......... %s' %(i))
     
+    if choice == "KV":
+        for key,val in my_dict.items():
+            print("Key: " + key +"\t\tValue: " + str(val))
 
-    for key,val in my_dict.items():
-        print("Key: " + key +"\t\tValue: " + str(val))
-
-    for item in nationalParks: #enumerate
-        print(item)
+    if choice == "NPI":
+        for item in nationalParks: #enumerate
+            print(item)
     
-    for index,item in enumerate(nationalParks):
-        print(str(index) + "\t" + item)
-    
-    
-    
+    if choice == "NPII":
+        for index,item in enumerate(nationalParks):
+            print(str(index) + "\t" + item)
+    if choice == "Squares":
+        sum = 0
+        for num in squares:
+            sum += num
+        print("Sum of Squares list: " + str(sum))
 
     
     
@@ -162,4 +153,31 @@ import math as m
 print(m.pi) #Within the program, we now refer to the pi constant as m.pi rather than math.pi
 print(m.e)  #Within the program, we now refer to the pi constant as m.pi rather than math.pi
 
-assignVariables()
+
+
+
+
+
+
+variableI = 100 # This is an Integer 
+variableF= 100.30 # This is a Float 
+variableB = True # This is a Boolean 
+variableS = "fMRI Workshop 2017" # This is a String
+squares = [1, 4, 9, 16]
+
+print("Integer: %d\n" % (variableI) +  "Float:  %d\n" % (variableF) 
+        + "Boolean:  %s\n" %(variableB) + "String: %s" %(variableS))  
+
+
+nationalParks = makeList()
+my_dict = makeDictionary()
+
+for_choice = input("Enter List Example Choice: ")
+dict_choice = input("Enter Dictionary Example Choice: ")
+if_choice = input("Enter If Example Choice: ")
+
+
+forExamples(for_choice)
+ifExamples(if_choice)
+dictionaryExamples(dict_choice)
+
