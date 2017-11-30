@@ -17,11 +17,16 @@ def QA_writer(basedir,outfile,writedir):
                     print('skipping')
                 elif filename.endswith('.png'): 
                     list_of_files[filename] = os.sep.join([dirpath, filename])
-                    print(list_of_files)
+                    #print(list_of_files)
         for key in list_of_files:
             os.system("echo '<p>=============<p> %s %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(sub,key,list_of_files[key],'100%', outfile))
             shutil.copy(list_of_files[key],writedir)
 #        pdb.set_trace()
+        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==2:
+            print(file+' has 2 cope files :D')
+        else:
+            print(file+' is missing copes, need to rerun')
+            shutil.rmtree(file)
 
 def main():
     basedir='/Users/gracer/Desktop/data/derivatives/task'
