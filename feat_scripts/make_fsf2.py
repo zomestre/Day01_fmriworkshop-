@@ -2,9 +2,8 @@
 
 import os
 import glob
-import fnmatch
 import argparse
-import pdb
+#import pdb
 
 def create_fsf2(basedir,repl_dict, indir,arglist):
     if arglist['TASK']==False:
