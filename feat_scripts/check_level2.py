@@ -1,12 +1,12 @@
+#this script will make sure there are 28 cope directories, else it will move it to a fail folder
 import os
 import glob
 import shutil
-#import pdb
 import datetime
 
 def QA_writer(basedir,outfile,writedir):
 
-    for file in glob.glob(os.path.join(basedir,'sub*','grace_edit','*.feat')):
+    for file in glob.glob(os.path.join(basedir,'sub*','grace_edit','*.gfeat')):
         os.chdir(file)
         print(file)
         sub=file.split('/')[7]
@@ -22,8 +22,8 @@ def QA_writer(basedir,outfile,writedir):
             os.system("echo '<p>=============<p> %s %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(sub,key,list_of_files[key],'100%', outfile))
             shutil.copy(list_of_files[key],writedir)
 #        pdb.set_trace()
-        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==2:
-            print(file+' has 2 cope files :D')
+        if len(glob.glob(os.path.join(file,'cope*.feat')))==2:
+            print(file+' has 2 cope directories :D')
         else:
             print(file+' is missing copes, need to rerun')
             shutil.rmtree(file)
@@ -32,7 +32,7 @@ def main():
     basedir='/Users/gracer/Desktop/data/derivatives/task'
     writedir='/Users/gracer/Desktop/data/files'
     datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
-    outfile = os.path.join(writedir,'lev1_QA_%s.html'%datestamp)        
+    outfile = os.path.join(writedir,'lev2_QA_%s.html'%datestamp)        
     QA_writer(basedir,outfile,writedir)
 main()
 

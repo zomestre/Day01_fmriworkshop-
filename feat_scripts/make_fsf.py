@@ -4,7 +4,7 @@
 import glob
 import os
 from subprocess import check_output
-import pdb
+#import pdb
 import argparse
 
 #confounds CONFOUNDS
