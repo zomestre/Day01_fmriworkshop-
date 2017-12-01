@@ -31,11 +31,17 @@ def create_fsf3(basedir,repl_dict, outdir, arglist):
             x=('set feat_files(%i) "%s"\n'%(i,sub))
             q=272+i
             data.insert(q,x)
+        i=0    
+        for sub in glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item)):
+            i=i+1 
             y=('set fmri(evg%i.1) 1\n'%(i))
-            r=316+1+i
+            r=315+len(feats)+i
             data.insert(r,y)
+        i=0
+        for sub in glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item)):
+            i=i+1 
             z=('set fmri(groupmem.%i) 1\n'%(i))
-            p=318+2+i
+            p=317+len(feats)+len(feats)+i
             data.insert(p,z)
 
         pdb.set_trace()
@@ -85,3 +91,4 @@ def main():
     create_fsf3(basedir,repl_dict, outdir, arglist)
 
 main()
+os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts/feat_scripts')
