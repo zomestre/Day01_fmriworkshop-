@@ -41,4 +41,4 @@ main()
 #copy the mean_func.nii.gz to reg/standard.nii.gz
 #check the voxel intensities in the stats/cope.nii.gz and reg_standard/stats/cope.nii.gz 
 #need to be the same (level 1)
-#data dimension and pixel size should be the samea
+#data dimension and pixel size should be the same
