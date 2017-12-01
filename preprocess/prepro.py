@@ -1,31 +1,37 @@
 #!/usr/bin/env python
 import glob
 import os
-#import pdb
+import pdb
 import datetime
 import argparse
 import shutil
 import fnmatch
 import subprocess
+from multiprocessing import Pool
 
-def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
-#bet
+def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
+#def better(args,arglist,basedir):
+    #bet
     if args.STRIP==True:
         print("starting bet")
-        os.chdir(os.path.join(basedir))
-        for nifti in glob.glob('sub-*/func'):
-            os.chdir(os.path.join(basedir, nifti))
-            for input in glob.glob('*bart_bold.nii.gz'):
-                output=input.strip('.nii.gz')
+        print(DATA)
+#        os.chdir(os.path.join(basedir))
+        for sub in DATA:
+            for nifti in glob.glob(os.path.join(sub,'func','sub-*_task-%s_bold.nii.gz')%(arglist['TASK'])):
+#                print(nifti)
+#            os.chdir(os.path.join(basedir, nifti))
+#            for input in glob.glob('*bart_bold.nii.gz'):
+                output=nifti.strip('.nii.gz')
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
+#                    print('')
                 else:
                     BET_OUTPUT=output+'_brain'
                     x=("/usr/local/fsl/bin/bet %s %s -F"%(input, BET_OUTPUT))
-                    print(x)
+#                    print(x)
                     os.system(x)
                     
-
+#def betrage(basedir,args, arglist):
 #bet rage
     if args.RAGE==True:
         print("starting bet rage")
@@ -72,9 +78,9 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     
             
 #motion correction
-    if args.MOCO==False:
-        print("please set a threshold for the FD, a good one is 0.9")
-    else:
+    if args.MOCO==True:
+#        print("please set a threshold for the FD, a good one is 0.9")
+#    else:
         print("starting motion correction")
         os.chdir(os.path.join(basedir))
         for dir in glob.glob('sub-*/func'):
@@ -101,7 +107,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
                     if num_scrub[0]>45:
                         with open(out_bad_bold_list, "a") as myfile:
                             myfile.write("%s\n"%(output))
-                    
+                        myfile.close()
                     if os.path.exists("%s_mcf.par"%(output)):
                         if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
                             usr_in=raw_input('looks like par exists, continue? ')
@@ -137,17 +143,24 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list):
  
 
 
-    myfile.close()
 
-def main():
+
+def split_list(a_list):
+        half = len(a_list)/2
+        return a_list[:half], a_list[half:]
+
+
+def main(DATA):
     basedir='/Users/gracer/Desktop/data'
     writedir='/Users/gracer/Desktop/data'
     
     datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
     outhtml = os.path.join(writedir,'bold_motion_QA_%s.html'%(datestamp))
-    out_bad_bold_list = os.path.join(writedir,'subs_lose_gt_45_vol_scrub_%s.txt'%(datestamp))
+    out_bad_bold_list = os.path.join(writedir,'lose_gt_45_vol_scrub_%s.txt'%(datestamp))
 
     parser=argparse.ArgumentParser(description='preprocessing')
+    parser.add_argument('-task',dest='TASK',
+                        default=False, help='which task are we running on?')
     parser.add_argument('-bet',dest='STRIP',action='store_true',
                         default=False, help='bet via fsl using defaults for functional images')
     parser.add_argument('-betrage',dest='RAGE',action='store_true',
@@ -167,6 +180,14 @@ def main():
     for a in args._get_kwargs():
         arglist[a[0]]=a[1]
     print(arglist)
-    prepro(basedir, args, arglist, outhtml, out_bad_bold_list)    
-main()
+    prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA)
+
+all_data=glob.glob('/Users/gracer/Desktop/data/sub*')
+B, C = split_list(all_data)
+
+if __name__ == "__main__": 
+    pool = Pool(processes=2)
+    pool.map(main, [B,C]) 
+           
+
 os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts')
