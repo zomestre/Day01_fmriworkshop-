@@ -25,14 +25,15 @@ def create_fsf3(basedir,repl_dict, outdir, arglist):
         
         with open(os.path.join(basedir,'level3_test.fsf'),'r') as infile:
                 data=infile.readlines()
-        with open(os.path.join(basedir,'neat.fsf'),'a+') as neat:
             
-            for sub in glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item)): 
-                i=i+1 
-                neat.write('set feat_files(%i) "%s"\n'%(i,sub)) 
+        for sub in glob.glob(os.path.join(basedir,'derivatives','task','sub-*','grace_edit','%s.gfeat'%arglist['TASK'],'cope%s.feat'%item)): 
+            i=i+1 
+            x=('set feat_files(%i) "%s"\n'%(i,sub))
+            q=317+i
+            data.insert(q,x)
 #                data[317+inputdir+i]=('set fmri(evg%i.1) 1'%(i)) 
 #                data[319+inputdir+i]=('set fmri(groupmem.%i) 1'%(i)) 
-        data[317]=neat
+
         pdb.set_trace()
         with open(os.path.join(basedir,'new_level3_test.fsf'),'w') as tempfsf:
             tempfsf.writelines(data)
