@@ -77,9 +77,9 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                     
             
 #motion correction
-    if args.MOCO==True:
-#        print("please set a threshold for the FD, a good one is 0.9")
-#    else:
+    if args.MOCO==False:
+        print(" ")
+    else:
         print("starting motion correction")
 #        os.chdir(os.path.join(basedir))
         for sub in DATA:
@@ -111,35 +111,35 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                             myfile.close()
                         if os.path.exists("%s_mcf.par"%(output)):
                             if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
-                                usr_in=raw_input('looks like par exists, continue? ')
-                                if fnmatch.fnmatch(usr_in, 'n'):
-                                    print("not saving the par file in motion_assessment")
-                                elif fnmatch.fnmatch(usr_in, 'y'):
-                                    os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
-                                    shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
-                                    rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
-                                    table = [line.rstrip().split() for line in rawfile.readlines()]
-                                    for i in range(6):
-                                        newtable = ([[line[i]] for line in table])
-                                        f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
-                                        for item in newtable:
-                                            neat=item[0]
-                                            f.write(str(neat)+'\n')
-                                        f.close()
-                                else:
-                                    print("Please answer y for yes and n for n")
-                                    usr_in=raw_input('looks like par exists, continue? ')
-                            else:
-                                shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
-                                rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
-                                table = [line.rstrip().split() for line in rawfile.readlines()]
-                                for i in range(6):
-                                    newtable = ([[line[i]] for line in table])
-                                    f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
-                                    for item in newtable:
-                                        neat=item[0]
-                                        f.write(str(neat)+'\n')
-                                    f.close()
+#                                usr_in=raw_input('looks like par exists, continue? ')
+#                                if fnmatch.fnmatch(usr_in, 'n'):
+#                                    print("not saving the par file in motion_assessment")
+#                                elif fnmatch.fnmatch(usr_in, 'y'):
+                                os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
+#                                    shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+#                                    rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+#                                    table = [line.rstrip().split() for line in rawfile.readlines()]
+#                                    for i in range(6):
+#                                        newtable = ([[line[i]] for line in table])
+#                                        f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
+#                                        for item in newtable:
+#                                            neat=item[0]
+#                                            f.write(str(neat)+'\n')
+#                                        f.close()
+#                                else:
+#                                    print("Please answer y for yes and n for n")
+#                                    usr_in=raw_input('looks like par exists, continue? ')
+#                            else:
+                        shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                        rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+                        table = [line.rstrip().split() for line in rawfile.readlines()]
+                        for i in range(6):
+                            newtable = ([[line[i]] for line in table])
+                            f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
+                            for item in newtable:
+                                neat=item[0]
+                                f.write(str(neat)+'\n')
+                            f.close()
                 
  
 
