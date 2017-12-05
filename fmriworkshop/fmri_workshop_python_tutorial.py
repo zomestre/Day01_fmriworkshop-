@@ -12,11 +12,15 @@ This is how you do a block comment
 
 
 
-def makeList():
+def makeList(print_list):
+    
+    
     nationalParks = ['Yosemite', 'Grand Canyon', "Zion", "Bryce", "Arches"]
     
-    print("Index 0 of National Parks list: " + nationalParks[0])
-    return makeList
+    if print_list == True:
+        print("Index 0 of National Parks list: " + nationalParks[0])
+    
+    return nationalParks 
 
 
 def appendList(userInput):
@@ -31,7 +35,7 @@ def sortList():
 
 
 
-def makeDictionary():
+def makeDictionary(print_dict):
     
     # empty dictionary
     my_dict = {}
@@ -42,8 +46,11 @@ def makeDictionary():
         'Species': 'Cat', 
         'Age': 7
         }
-    print(my_dict)
-    print("dict['Name']:", my_dict['Name'], "\ndict['Species']:", my_dict['Species'], "\ndict['Age']):", my_dict['Age'])
+    
+    if print_dict == True:
+        
+        print(my_dict)
+        print("dict['Name']:", my_dict['Name'], "\ndict['Species']:", my_dict['Species'], "\ndict['Age']):", my_dict['Age'])
     
     return my_dict 
   
@@ -78,17 +85,18 @@ def dictionaryExamples(selection):
 
 
     
-def ifExamples():
+def ifExamples(choice):
     
     
-    if variableB is True: #  10 > 5, 5 > 10
-        print("Condition is TRUE. I am in the if block.")
-    else:
-        print("Condition is FALSE. I am in else block.")
+   if choice == "variable":
+       if variableB is True: #  10 > 5, 5 > 10
+            print("Condition is TRUE. I am in the if block.")
+       else:
+           print("Condition is FALSE. I am in else block.")
 
-
-    if 'Yosemite' in nationalParks:
-        print("Found 'Yosemite' in our list")
+   if choice == "list":
+        if 'Yosemite' in nationalParks:
+            print("Found 'Yosemite' in our list")
     
 
 # The for loop processes each item in a sequence, so it is used with Python’s sequence data types - strings, lists, and tuples.
@@ -135,11 +143,11 @@ def forExamples(choice):  # using a range
 # for example, a Python file called hello.py has the module name of hello that can be imported into other Python files, or used on the Python command line interpreter.
 # Modules can define functions, classes, and variables that you can reference in other Python .py files or via the Python command line interpreter. 
 # In Python, modules are accessed by using the import statement. When you do this, you execute the code of the module, keeping the scopes of the definitions so that your current file(s) can make use of these.
-import random
+#import random
 
 
-for i in range(5):
-    print(random.randint(1, 25))    
+#for i in range(5):
+ #   print(random.randint(1, 25))    
 
 """
 It is possible to modify the names of modules and their functions within Python by using the as keyword.
@@ -147,16 +155,43 @@ It is possible to modify the names of modules and their functions within Python 
 You may want to change a name because you have already used the same name for something else in your program, another module you have imported also uses that name, 
 or you may want to abbreviate a longer name that you are using a lot.
 """
-import math as m
+#import math as m
 
 
-print(m.pi) #Within the program, we now refer to the pi constant as m.pi rather than math.pi
-print(m.e)  #Within the program, we now refer to the pi constant as m.pi rather than math.pi
+#print(m.pi) #Within the program, we now refer to the pi constant as m.pi rather than math.pi
+#print(m.e)  #Within the program, we now refer to the pi constant as m.pi rather than math.pi
 
 
 
 
 
+
+def print_variables():
+     print("Integer: %d\n" % (variableI) +  "Float:  %d\n" % (variableF) 
+        + "Boolean:  %s\n" %(variableB) + "String: %s" %(variableS))  
+
+
+
+
+def main():
+
+   
+   
+    
+    
+
+    start_selection = input("Examples\n a. \t var - variable\n b. \t for \n c. \t dict \n d. \t if \n ENTER CHOICE: " )
+    if start_selection == "a":
+        print_variables()
+    if start_selection == "b":
+        for_choice = input("Enter List Example Choice: \n <Range, KV, NPI, NPII, Squares>: ")
+        forExamples(for_choice)
+    if start_selection == "c":
+        dict_choice = input("Enter Dictionary Example Choice \n <IF, Update, Add>: ")
+        dictionaryExamples(dict_choice)
+    if start_selection == "d":
+        if_choice = input("Enter If Example Choice \n <variable, list>: ")
+        ifExamples(if_choice)
 
 
 variableI = 100 # This is an Integer 
@@ -164,19 +199,10 @@ variableF= 100.30 # This is a Float
 variableB = True # This is a Boolean 
 variableS = "fMRI Workshop 2017" # This is a String
 squares = [1, 4, 9, 16]
+nationalParks = makeList(False)
+#x=False
+my_dict = makeDictionary(False)
+    
+    
 
-print("Integer: %d\n" % (variableI) +  "Float:  %d\n" % (variableF) 
-        + "Boolean:  %s\n" %(variableB) + "String: %s" %(variableS))  
-
-
-nationalParks = makeList()
-my_dict = makeDictionary()
-
-for_choice = input("Enter List Example Choice: ")
-dict_choice = input("Enter Dictionary Example Choice: ")
-if_choice = input("Enter If Example Choice: ")
-
-
-forExamples(for_choice)
-ifExamples(if_choice)
-dictionaryExamples(dict_choice)
+main()
