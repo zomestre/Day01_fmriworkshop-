@@ -30,7 +30,7 @@ def QA_writer(basedir,outfile,writedir):
 
 def main():
     basedir='/Users/gracer/Desktop/data/derivatives/task'
-    writedir='/Users/gracer/Desktop/data/files'
+    writedir='/Users/gracer/Desktop/data/'
     datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
     outfile = os.path.join(writedir,'lev1_QA_%s.html'%datestamp)        
     QA_writer(basedir,outfile,writedir)

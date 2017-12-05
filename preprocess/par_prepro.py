@@ -16,6 +16,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
 
         for sub in DATA:
             for nifti in glob.glob(os.path.join(sub,'func','sub-*_task-%s_bold.nii.gz')%(arglist['TASK'])):
+                input=nifti
                 output=nifti.strip('.nii.gz')
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
@@ -115,14 +116,6 @@ def main(DATA):
                         default=False, help='bet via fsl using defaults for functional images')
     parser.add_argument('-betrage',dest='RAGE',action='store_true',
                         default=False, help='bet via fsl using robust estimation for anatomical images')
-    parser.add_argument('-reorient',dest='REOR',action='store_true',
-                        default=False, help='using fslswapdim to fix orientation problems')
-    parser.add_argument('-trim',dest='TRIM',action='store_true',
-                        default=False, help='this trims extra trs, this requires the -extra and -total flags')
-    parser.add_argument('-extra',dest='EX',
-                        default=False, help='TRs to remove')
-    parser.add_argument('-total',dest='TOT',
-                        default=False, help='total TRs')
     parser.add_argument('-moco',dest='MOCO',
                         default=False, help='this is using fsl_motion_outliers to preform motion correction and generate a confounds.txt as well as DVARS')
     args = parser.parse_args()

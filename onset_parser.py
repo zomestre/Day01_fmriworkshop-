@@ -68,7 +68,7 @@ def main():
     print(arglist)
     ons_parse(basepath, args, arglist,missing)    
 main()
-
+os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts/feat_scripts')
     
     
 
