@@ -187,7 +187,10 @@ def main():
    while go != False: 
 
         start_selection = input("Examples\n a. \t var - variable\n b. \t for \n c. \t dict \n d. \t if \n ENTER CHOICE: " )
+<<<<<<< HEAD
         
+=======
+>>>>>>> a2805f1c6a54d39029ddd41fd1858eab9ee16751
         if start_selection == "a":
             print_variables()
         if start_selection == "b":
@@ -200,9 +203,15 @@ def main():
             if_choice = input("Enter If Example Choice \n <variable, list>: ")
             ifExamples(if_choice)
     
+<<<<<<< HEAD
         go = input("Continue? ")
         #go =False 
         return go 
+=======
+        go = input("Continue? \t")
+
+        return go
+>>>>>>> a2805f1c6a54d39029ddd41fd1858eab9ee16751
 
 
 
