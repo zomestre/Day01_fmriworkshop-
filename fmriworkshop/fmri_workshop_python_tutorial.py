@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
+'''
 Created on Tue Nov 28 17:48:40 2017
 @author: Nichollette
 
 This is a basic script for the fMRI workshop Python Basic Lesson
 This is how you do a block comment
-"""
+'''
 
 # This is how you do individual comments
 
@@ -175,23 +175,31 @@ def print_variables():
 
 def main():
 
+   go = True
    
    
     
-    
+   while go != False: 
 
-    start_selection = input("Examples\n a. \t var - variable\n b. \t for \n c. \t dict \n d. \t if \n ENTER CHOICE: " )
-    if start_selection == "a":
-        print_variables()
-    if start_selection == "b":
-        for_choice = input("Enter List Example Choice: \n <Range, KV, NPI, NPII, Squares>: ")
-        forExamples(for_choice)
-    if start_selection == "c":
-        dict_choice = input("Enter Dictionary Example Choice \n <IF, Update, Add>: ")
-        dictionaryExamples(dict_choice)
-    if start_selection == "d":
-        if_choice = input("Enter If Example Choice \n <variable, list>: ")
-        ifExamples(if_choice)
+        start_selection = input("Examples\n a. \t var - variable\n b. \t for \n c. \t dict \n d. \t if \n ENTER CHOICE: " )
+        if start_selection == "a":
+            print_variables()
+        if start_selection == "b":
+            for_choice = input("Enter List Example Choice: \n <Range, KV, NPI, NPII, Squares>: ")
+            forExamples(for_choice)
+        if start_selection == "c":
+            dict_choice = input("Enter Dictionary Example Choice \n <IF, Update, Add>: ")
+            dictionaryExamples(dict_choice)
+        if start_selection == "d":
+            if_choice = input("Enter If Example Choice \n <variable, list>: ")
+            ifExamples(if_choice)
+    
+        go = input("Continue? \t")
+
+        return go
+
+
+
 
 
 variableI = 100 # This is an Integer 
