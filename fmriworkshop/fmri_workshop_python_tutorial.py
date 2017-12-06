@@ -27,6 +27,12 @@ def appendList(userInput):
     nationalParks.append(userInput)
     print(nationalParks)
 
+
+
+
+
+
+
 def sortList():
     print(nationalParks)
     nationalParks.sort()
@@ -86,10 +92,9 @@ def dictionaryExamples(selection):
 
     
 def ifExamples(choice):
-    
-    
+        
    if choice == "variable":
-       if variableB is True: #  10 > 5, 5 > 10
+       if 10 > 5:   #variableB is True: #  , 5 > 10
             print("Condition is TRUE. I am in the if block.")
        else:
            print("Condition is FALSE. I am in else block.")
@@ -182,6 +187,7 @@ def main():
    while go != False: 
 
         start_selection = input("Examples\n a. \t var - variable\n b. \t for \n c. \t dict \n d. \t if \n ENTER CHOICE: " )
+        
         if start_selection == "a":
             print_variables()
         if start_selection == "b":
@@ -194,9 +200,9 @@ def main():
             if_choice = input("Enter If Example Choice \n <variable, list>: ")
             ifExamples(if_choice)
     
-        go = input("Continue? \t")
-
-        return go
+        go = input("Continue? ")
+        #go =False 
+        return go 
 
 
 
@@ -204,9 +210,12 @@ def main():
 
 variableI = 100 # This is an Integer 
 variableF= 100.30 # This is a Float 
-variableB = True # This is a Boolean 
+variableB = False # This is a Boolean 
 variableS = "fMRI Workshop 2017" # This is a String
+
 squares = [1, 4, 9, 16]
+
+
 nationalParks = makeList(False)
 #x=False
 my_dict = makeDictionary(False)
