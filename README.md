@@ -11,3 +11,4 @@ grace.shearrer@gmail.com
 # @author: Nichollette Acosta 
 This is my forked version of the nibl_workshop repository. My add ons
 are going to be used for my lessons at the fmri_workshop2017
+# changing 12/6/2017 
