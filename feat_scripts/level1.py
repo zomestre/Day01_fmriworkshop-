@@ -26,4 +26,6 @@ def run_level1(DATA):
 
 if __name__ == '__main__':
    pool = Pool(processes=2)
-   pool.map(run_level1, [B,C]) 
+   pool.map(run_level1, [B,C])
+   pool.close()
+   pool.join()
