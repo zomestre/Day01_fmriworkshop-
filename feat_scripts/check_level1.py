@@ -21,12 +21,15 @@ def QA_writer(basedir,outfile,writedir):
         for key in dict_of_files:
             os.system("echo '<p>=============<p> %s %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(sub,key,dict_of_files[key],'100%', outfile))
             #shutil.copy(dict_of_files[key],writedir)
+        if os.path.exists(os.path.join(basedir,'fails'))==False:
+            os.makedirs(os.path.join(basedir,'fails'))
 
-        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==5:
-            print(file+' has 5 cope files :D')
+        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==4:
+            print(file+' has 4 cope files :D')
         else:
             print(file+' is missing copes, need to rerun')
-            shutil.rmtree(file)
+            name=file.split('/')[9].split('.')[0]
+            shutil.copytree(file,os.path.join(basedir,'fail',sub,name))
 
 def main():
     basedir='/Users/gracer/Desktop/data/derivatives/task'
