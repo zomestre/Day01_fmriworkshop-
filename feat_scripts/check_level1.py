@@ -19,11 +19,11 @@ def QA_writer(basedir,outfile,writedir):
                     dict_of_files[filename] = os.sep.join([dirpath, filename])
 
         for key in dict_of_files:
-            os.system("echo '<p>=============<p> %s %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(sub,key,list_of_files[key],'100%', outfile))
-            shutil.copy(dict_of_files[key],writedir)
+            os.system("echo '<p>=============<p> %s %s <br><IMG BORDER=0 SRC=%s WIDTH=%s></BODY></HTML>' >> %s"%(sub,key,dict_of_files[key],'100%', outfile))
+            #shutil.copy(dict_of_files[key],writedir)
 
-        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==2:
-            print(file+' has 2 cope files :D')
+        if len(glob.glob(os.path.join(file,'stats','cope*.nii.gz')))==5:
+            print(file+' has 5 cope files :D')
         else:
             print(file+' is missing copes, need to rerun')
             shutil.rmtree(file)
