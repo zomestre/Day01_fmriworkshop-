@@ -16,7 +16,6 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
 
         for sub in DATA:
             for nifti in glob.glob(os.path.join(sub,'func','sub-*_task-%s_bold.nii.gz')%(arglist['TASK'])):
-                input=nifti
                 output=nifti.strip('.nii.gz')
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
@@ -45,19 +44,19 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
        
 #motion correction
     if args.MOCO==False:
-        print("No moco ")
+        print(" ")
     else:
         print("starting motion correction")
         for sub in DATA:
             for dir in glob.glob(os.path.join(sub,'func')):
-                print(dir)
-                if not os.path.exists(os.path.join(dir,'motion_assessment')):
-                    os.makedirs(os.path.join(dir,'motion_assessment'))
-                for input in glob.glob(os.path.join(dir,'*bart*brain.nii.gz')):
+                if not os.path.exists(os.path.join(basedir,dir,'motion_assessment')):
+                    os.makedirs(os.path.join(basedir,dir,'motion_assessment'))
+                os.chdir(os.path.join(basedir, dir))
+                for input in glob.glob('*brain.nii.gz'):
                     output=input.split('.')[0]
                     print(output)
-                    if os.path.exists(os.path.join(dir,output+'_mcf.nii.gz')):
-                        print(output+'_mcf.nii.gz exists, skipping')
+                    if output.endswith('mcf'):
+                        print(output+' exists, skipping')
                     else:
                         os.system("mcflirt -in %s -plots"%(output))
                         os.system("fsl_motion_outliers -i %s -o motion_assessment/%s_confound.txt --fd --thresh=%s -p motion_assessment/fd_plot -v > motion_assessment/%s_outlier_output.txt"%(output,output,arglist['MOCO'],output))
@@ -76,20 +75,20 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                                 myfile.write("%s\n"%(output))
                             myfile.close()
                             
-#                        if os.path.exists("%s_mcf.par"%(output)):
-#                            if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
-#                                os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
-#
-#                            shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
-#                            rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
-#                            table = [line.rstrip().split() for line in rawfile.readlines()]
-#                            for i in range(6):
-#                                newtable = ([[line[i]] for line in table])
-#                                f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
-#                                for item in newtable:
-#                                    neat=item[0]
-#                                    f.write(str(neat)+'\n')
-#                                f.close()
+                        if os.path.exists("%s_mcf.par"%(output)):
+                            if os.path.exists(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output))):
+                                    os.remove(os.path.join(basedir,dir,'motion_assessment',"%s_mcf.par"%(output)))
+
+                        shutil.move("%s_mcf.par"%(output),os.path.join(basedir,dir,'motion_assessment'))
+                        rawfile = open(os.path.join(os.path.join(basedir,dir,'motion_assessment','%s_mcf.par'%(output))), 'r')
+                        table = [line.rstrip().split() for line in rawfile.readlines()]
+                        for i in range(6):
+                            newtable = ([[line[i]] for line in table])
+                            f=open(os.path.join(basedir,dir,'motion_assessment','%s_motcor%i.txt'%(output,i)),'w')
+                            for item in newtable:
+                                neat=item[0]
+                                f.write(str(neat)+'\n')
+                            f.close()
                 
  
 
@@ -116,6 +115,14 @@ def main(DATA):
                         default=False, help='bet via fsl using defaults for functional images')
     parser.add_argument('-betrage',dest='RAGE',action='store_true',
                         default=False, help='bet via fsl using robust estimation for anatomical images')
+    parser.add_argument('-reorient',dest='REOR',action='store_true',
+                        default=False, help='using fslswapdim to fix orientation problems')
+    parser.add_argument('-trim',dest='TRIM',action='store_true',
+                        default=False, help='this trims extra trs, this requires the -extra and -total flags')
+    parser.add_argument('-extra',dest='EX',
+                        default=False, help='TRs to remove')
+    parser.add_argument('-total',dest='TOT',
+                        default=False, help='total TRs')
     parser.add_argument('-moco',dest='MOCO',
                         default=False, help='this is using fsl_motion_outliers to preform motion correction and generate a confounds.txt as well as DVARS')
     args = parser.parse_args()
