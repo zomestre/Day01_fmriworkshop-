@@ -54,8 +54,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                 os.chdir(os.path.join(basedir, dir))
                 for input in glob.glob('*brain.nii.gz'):
                     output=input.split('.')[0]
-                    print(output)
-                    if output.endswith('mcf'):
+                    if os.path.exists(os.path.join(dir,output+'_mcf.nii.gz'))==True:
                         print(output+' exists, skipping')
                     else:
                         os.system("mcflirt -in %s -plots"%(output))
