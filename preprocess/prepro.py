@@ -77,9 +77,9 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                     
             
 #motion correction
-    if args.MOCO==True:
-#        print("please set a threshold for the FD, a good one is 0.9")
-#    else:
+    if args.MOCO==False:
+        print("please set a threshold for the FD, a good one is 0.9")
+    else:
         print("starting motion correction")
 #        os.chdir(os.path.join(basedir))
         for sub in DATA:
@@ -91,7 +91,7 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
                 for input in glob.glob('*brain.nii.gz'):
                     output=input.split('.')[0]
                     print(output)
-                    if output.endswith('mcf'):
+                    if output.endswith('mcf.nii.gz'):
                         print(output+' exists, skipping')
                     else:
                         os.system("mcflirt -in %s -plots"%(output))

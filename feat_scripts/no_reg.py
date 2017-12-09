@@ -28,12 +28,14 @@ def reg_check(basedir,IDmat):
                     
         
             
-def main():
-    basedir='/Users/gracer/Desktop/data/derivatives/task'
+def main(BASEDIR):
+    basedir=BASEDIR
     IDmat='/usr/local/fsl/etc/flirtsch/ident.mat'
     reg_check(basedir,IDmat)
-main()
 
+if __name__ == "__main__":
+    BASEDIR='/Users/gracer/Desktop/data/derivatives/task'
+    main(BASEDIR)
 
 #check that reg_standard exists in the first level
 #if it exists delete:

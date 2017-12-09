@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
-#import sys
 import glob
 import os
 from subprocess import check_output
 #import pdb
 import argparse
 
-#confounds CONFOUNDS
-#evs EV1
-#numEVS=NUMVS
 
 def create_fsf(basedir,repl_dict,outdir, arglist):
     os.chdir(basedir)
