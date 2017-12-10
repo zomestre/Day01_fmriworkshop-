@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-Created on Tue Nov 28 17:48:40 2017
-@author: Nichollette
+
+@author: Nichollette Acosta
 
 This is a basic script for the fMRI workshop Python Basic Lesson
 This is how you do a block comment
@@ -9,30 +9,58 @@ This is how you do a block comment
 
 # This is how you do individual comments
 
+# A function is a block or organized, reusable code that is used to perform a sing
+# related action
+# The Python programming languages comes with a variety of built-in functions 
+# example: print() 
+    
+
+# Importing Modules
+    
+# Modules are Python .py files that consist of Python code. Any Python file can be referenced as a module. 
+# for example, a Python file called hello.py has the module name of hello that can be imported into other Python files, or used on the Python command line interpreter.
+# Modules can define functions, classes, and variables that you can reference in other Python .py files or via the Python command line interpreter. 
+# In Python, modules are accessed by using the import statement. When you do this, you execute the code of the module, keeping the scopes of the definitions so that your current file(s) can make use of these.
+#import random
+
+
+
+"""
+It is possible to modify the names of modules and their functions within Python by using the as keyword.
+
+You may want to change a name because you have already used the same name for something else in your program, another module you have imported also uses that name, 
+or you may want to abbreviate a longer name that you are using a lot.
+"""
 
 ## Lists: mutable(changeable) sequences of object references accessed by offset(position)
 ## They are unordered tables that map key to values. 
 # the makeList() function shows how to assign lists to variables
  
 
+
 def assignVariables():
-    global variableI = 100 # This is an Integer 
-    global variableF= 100.30 # This is a Float 
-    global variableB = False # This is a Boolean 
-    global variableS = "fMRI Workshop 2017" # This is a String
+    variableI = 100 # This is an Integer 
+    global variableF
+    variableF= 100.30 # This is a Float 
+    global variableB
+    variableB = False # This is a Boolean 
+    global variableS
+    variableS = "fMRI Workshop 2017" # This is a String
 
 
 
 def makeList():
     
-    # make an empty list 
+    # make an empty list -- the list is local 
     emptyList = []
     
     # make a list of Strings
-    global nationalParks = ['Yosemite', 'Grand Canyon', "Zion", "Bryce", "Arches"]
+    global nationalParks
+    nationalParks = ['Yosemite', 'Grand Canyon', "Zion", "Bryce", "Arches"]
 
     # make a list of integers
-    global intList = [ 10, 60, 30, 40, 90]
+    global intList 
+    intList = [ 10, 60, 30, 40, 90]
     
     # make a mixed list
     mixedList = [ 100, 'Dr. Pepper', 75.25, True ]
@@ -42,16 +70,16 @@ def makeList():
 
 # the listExamples() function shows various list manipulation examples 
     
-def listExamples(userInput):
-    
+def listExamples(park):
+    newpark = park
     
     # add, or 'append', an item to the end of a list 
     # --add item explicitly
     nationalParks.append("Yellowstone")  
     intList.append(50)
+    
     # -- add item through a variable
-    name = "Death Valley"
-    nationalParks.append(name)
+    nationalParks.append(newpark)
     
     print(nationalParks)
 
@@ -86,27 +114,22 @@ def listExamples(userInput):
 ## Dictionaries: mutable(changeable) mappings of object references accessed by key.
 
     
-def makeDictionary(print_dict):
+def makeDictionary():
     
     # make an empty dictionary
     empty_dict = {}
 
      # dictionary
-    global animal_dict= {
+    global animal_dict 
+    animal_dict= {
         'Name' : 'Leo',
         'Species': 'Cat', 
         'Age': 7
          
         }
     
-    if print_dict == True:
-        
-        print(my_dict)
-        print("dict['Name']:", my_dict['Name'], "\ndict['Species']:", my_dict['Species'], "\ndict['Age']):", my_dict['Age'])
-    
-    return my_dict 
   
-def dictionaryExamples(selection):
+def dictionaryExamples():
     
     # get dictionary keys
     animal_dict.keys()
@@ -119,11 +142,11 @@ def dictionaryExamples(selection):
     "Name" in animal_dict
           
     # update value of dictionary 
-    my_dict['Age'] = 8; 
+    animal_dict['Age'] = 8; 
     # add new entry to dictionary 
-    my_dict['BloodType'] = 'A';  # Add new entry
+    animal_dict['BloodType'] = 'A';  # Add new entry
     
-    
+     
 ## The if statement: selects from one or more actions(statement blocks)
 # colon (:) is required, separates the HEADER from the BODY
 # example: 
@@ -138,7 +161,7 @@ def dictionaryExamples(selection):
 
 
 
-def ifExamples(choice):
+def ifExamples():
     
     # Example of using an if-statement on a list:
     if 'Yosemite' in nationalParks:
@@ -167,7 +190,7 @@ def ifExamples(choice):
         #               for LOOP_VARIABLE in SEQUENCE:
         #                   STATEMENTS  
 
-def forExamples(choice):  
+def forExamples():  
     
     # for loop using a range method 
     for i in range(5):
@@ -202,44 +225,33 @@ def forExamples(choice):
         sum += num
         print(sum)
 
-    
-  # A function is a block or organized, reusable code that is used to perform a sing
-# related action
-# The Python programming languages comes with a variety of built-in functions 
-# example: print() 
-    
 
-# Importing Modules
-    
-# Modules are Python .py files that consist of Python code. Any Python file can be referenced as a module. 
-# for example, a Python file called hello.py has the module name of hello that can be imported into other Python files, or used on the Python command line interpreter.
-# Modules can define functions, classes, and variables that you can reference in other Python .py files or via the Python command line interpreter. 
-# In Python, modules are accessed by using the import statement. When you do this, you execute the code of the module, keeping the scopes of the definitions so that your current file(s) can make use of these.
-#import random
-
-
-
-"""
-It is possible to modify the names of modules and their functions within Python by using the as keyword.
-
-You may want to change a name because you have already used the same name for something else in your program, another module you have imported also uses that name, 
-or you may want to abbreviate a longer name that you are using a lot.
-"""
-#import math as m
-
+# The main() function 
+# Python does not have a main entry point, it executes the source file line by line. Having 
+# a main() funciton is good practice.
+        
 def main():
     
+    # call functions 
+    assignVariables()
+    makeDictionary()
+
+    # return from a function
     mixed_list = makeList()
     print(mixed_list)
-    makeDictionary(False)
 
-
-
-
-
-
+    # call a function with a variable
+    # park = "Death Valley"
+    listExamples("Death Valley")
+    
+    ifExamples()
+    forExamples()
+    dictionaryExamples()
+    
+   
+# delcare a global variable 
+variableI = 0 
 
     
-    
-
+# first function to run - calls main 
 main()
