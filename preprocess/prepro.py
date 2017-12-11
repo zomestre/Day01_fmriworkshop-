@@ -14,21 +14,14 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
     #bet
     if args.STRIP==True:
         print("starting bet")
-#        print(DATA)
-#        os.chdir(os.path.join(basedir))
         for sub in DATA:
             for nifti in glob.glob(os.path.join(sub,'func','sub-*_task-%s_bold.nii.gz')%(arglist['TASK'])):
-#                print(nifti)
-#            os.chdir(os.path.join(basedir, nifti))
-#            for input in glob.glob('*bart_bold.nii.gz'):
                 output=nifti.strip('.nii.gz')
                 if os.path.exists(output+'_brain.nii.gz'):
                     print(output+' exists, skipping')
-#                    print('')
                 else:
                     BET_OUTPUT=output+'_brain'
                     x=("/usr/local/fsl/bin/bet %s %s -F"%(input, BET_OUTPUT))
-#                    print(x)
                     os.system(x)
                     
 
@@ -81,10 +74,8 @@ def prepro(basedir, args, arglist, outhtml, out_bad_bold_list,DATA):
         print("please set a threshold for the FD, a good one is 0.9")
     else:
         print("starting motion correction")
-#        os.chdir(os.path.join(basedir))
         for sub in DATA:
             for dir in glob.glob(os.path.join(sub,'func')):
-#        for dir in glob.glob(os.path.join('sub-*/func')):
                 if not os.path.exists(os.path.join(basedir,dir,'motion_assessment')):
                     os.makedirs(os.path.join(basedir,dir,'motion_assessment'))
                 os.chdir(os.path.join(basedir, dir))
