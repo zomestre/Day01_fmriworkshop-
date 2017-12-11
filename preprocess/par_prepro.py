@@ -139,4 +139,4 @@ if __name__ == "__main__":
     pool.map(main, [B,C]) 
            
 
-os.chdir('/Users/gracer/Google Drive/fMRI_workshop/scripts')
+os.chdir('/Users/gracer/Google Drive/fMRI_workshop/workshop_scripts/nibl_workshop')
