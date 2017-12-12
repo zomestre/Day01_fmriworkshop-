@@ -248,7 +248,7 @@ def main():
     forExamples()
     dictionaryExamples()
     
-   
+park="Alpes"   
 # delcare a global variable 
 variableI = 0 
 
